@@ -5,11 +5,11 @@ pragma solidity >=0.4.22 <0.9.0;
 /// @author @oleh
 /// @dev The project is purposely kept very simple for easy testing/deployment/...
 contract Adder {
-    uint[] private saved_numbers;
+    uint[] private savedNumbers;
 
-    event NewSummCalculated(address user, uint firstNumber, uint secondNumber, uint summ);
-    event ValueAddedToBlockChain(address user, uint summ);
-    event GetAllNumbers(address user);
+    event NewSummCalculated(address indexed user, uint firstNumber, uint secondNumber, uint summ);
+    event ValueAddedToBlockChain(address indexed user, uint summ);
+    event UserSeeSavedNumber(address indexed user, uint number);
 
     /// @notice Added two numbers and save summ in ClockChain. Emit events about its
     /// @param _firstNumber The user`s public address
@@ -20,13 +20,14 @@ contract Adder {
         emit NewSummCalculated(msg.sender, _firstNumber, _secondNumber, summ);
 
         // writing summ in BlockChain
-        saved_numbers.push(summ);
+        savedNumbers.push(summ);
         emit ValueAddedToBlockChain(msg.sender, summ);
     }
-    /// @notice Returns all saved in BlockChain summs and emit event about it
-    /// @return all saved in BlockChain summs
-    function getSavedSumm() external returns (uint[] memory) {
-        emit GetAllNumbers(msg.sender);
-        return saved_numbers;
+    /// @notice Emit data to all saved in BlockChain summs
+    function seeSavedSumm() external {
+        uint savedNumbersLen = savedNumbers.length;
+        for (uint i; i < savedNumbersLen; i++) {
+            emit UserSeeSavedNumber(msg.sender, savedNumbers[i]);
+        }
     }
 }
