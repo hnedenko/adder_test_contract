@@ -9,12 +9,13 @@ contract Adder {
 
     event NewSummCalculated(address indexed user, uint firstNumber, uint secondNumber, uint summ);
     event ValueAddedToBlockChain(address indexed user, uint summ);
-    event UserSeeSavedNumber(address indexed user, uint number);
+    event UserGetSavedNumbers(address indexed user, uint[] number);
 
     /// @notice Added two numbers and save summ in ClockChain. Emit events about its
     /// @param _firstNumber The user`s public address
     /// @param _secondNumber The user`s public address
-    function summTwoNumbers(uint _firstNumber, uint _secondNumber) external {
+    /// @return Summ of two numbers
+    function summTwoNumbers(uint _firstNumber, uint _secondNumber) external returns (uint) {
         // count summ
         uint summ = _firstNumber + _secondNumber;
         emit NewSummCalculated(msg.sender, _firstNumber, _secondNumber, summ);
@@ -22,12 +23,13 @@ contract Adder {
         // writing summ in BlockChain
         savedNumbers.push(summ);
         emit ValueAddedToBlockChain(msg.sender, summ);
+
+        return summ;
     }
+
     /// @notice Emit data to all saved in BlockChain summs
-    function seeSavedSumm() external {
-        uint savedNumbersLen = savedNumbers.length;
-        for (uint i; i < savedNumbersLen; i++) {
-            emit UserSeeSavedNumber(msg.sender, savedNumbers[i]);
-        }
+    function getSavedSumm() external returns (uint[] memory){
+        emit UserGetSavedNumbers(msg.sender, savedNumbers);
+        return savedNumbers;
     }
 }
