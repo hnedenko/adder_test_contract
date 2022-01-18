@@ -69,12 +69,4 @@ contract("Adder", (accounts) => {
             await expectEvent.inTransaction(rezult.tx, this.contractInstance, "UserGetSavedNumbers")
         })
     })
-
-    context ("Test test", async () => {
-        it("Test test", async () => {
-            const rezult = await this.contractInstance.summTwoNumbers(5, 7, {from: alice});
-            var s = await this.contractInstance.summTwoNumbers.call(5, 7, {from: alice});
-            expect(s).to.be.bignumber.equal(new BN(12));
-        })
-    })
 })
