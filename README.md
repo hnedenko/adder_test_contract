@@ -2,10 +2,10 @@
 A simple contract for easy testing and deploy.
 
 # Methods
-### summTwoNumbers
+### .summTwoNumbers(uint, uint) return (uint)
 Added two numbers, return summ and save it in ClockChain. Emit events about its
 Doesn't catch overflow (doesn't use SafeMath)!!!
-### getSavedSumm
+### .getSavedSumm() return (uint[])
 Return data to all saved in BlockChain summs and emit about its
 
 # Currently fully tested and deployed.
