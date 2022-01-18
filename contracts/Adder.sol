@@ -11,7 +11,7 @@ contract Adder {
     event ValueAddedToBlockChain(address indexed user, uint summ);
     event UserGetSavedNumbers(address indexed user, uint[] number);
 
-    /// @notice Added two numbers and save summ in ClockChain. Emit events about its
+    /// @notice Added two numbers, return summ and save it in ClockChain. Emit events about its
     /// @param _firstNumber The user`s public address
     /// @param _secondNumber The user`s public address
     /// @return Summ of two numbers
@@ -27,7 +27,7 @@ contract Adder {
         return summ;
     }
 
-    /// @notice Emit data to all saved in BlockChain summs
+    /// @notice Return data to all saved in BlockChain summs and emit about its
     function getSavedSumm() external returns (uint[] memory){
         emit UserGetSavedNumbers(msg.sender, savedNumbers);
         return savedNumbers;
