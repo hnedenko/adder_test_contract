@@ -19,8 +19,8 @@ contract("Adder", (accounts) => {
             expect(rezult.receipt.status).to.be.true;
         })
         it("Add 5 and 7 - correctness summ value", async () => {
-            const rezult = await this.contractInstance.summTwoNumbers(5, 7, {from: alice});
-            expect(rezult.logs[0].args.summ).to.be.bignumber.equal(new BN(12));
+            var rezult = await this.contractInstance.summTwoNumbers.call(5, 7, {from: alice});
+            expect(rezult).to.be.bignumber.equal(new BN(12));
         })
         it("Add 5 and 7 - expense gas", async () => {
             const rezult = await this.contractInstance.summTwoNumbers(5, 7, {from: alice});
@@ -40,6 +40,22 @@ contract("Adder", (accounts) => {
             const rezult = await this.contractInstance.getSavedSumm({from: alice});
             expect(rezult.receipt.status).to.be.true;
         })
+        it("Get saved summ - last sum in returned list", async () => {
+            await this.contractInstance.summTwoNumbers(5, 7, {from: alice});
+            var rezult = await this.contractInstance.getSavedSumm.call({from: alice});
+            last_index = rezult.length - 1;
+            expect(rezult[last_index]).to.be.bignumber.equal(new BN(12));
+        })
+        it("Get saved summ - past sum in returned list", async () => {
+            await this.contractInstance.summTwoNumbers(5, 7, {from: alice});
+            await this.contractInstance.summTwoNumbers(1, 7, {from: alice});
+            await this.contractInstance.summTwoNumbers(2, 1, {from: alice});
+            await this.contractInstance.summTwoNumbers(4, 6, {from: alice});
+            var rezult = await this.contractInstance.getSavedSumm.call({from: alice});
+            expect(rezult.toString()).to.be.bignumber.include(new BN(12));
+            expect(rezult.toString()).to.be.bignumber.include(new BN(8));
+            expect(rezult.toString()).to.be.bignumber.include(new BN(3));
+        })
         it("Get saved summ - expense gas", async () => {
             const rezult = await this.contractInstance.getSavedSumm({from: alice});
             expect(rezult.receipt.gasUsed).to.be.lessThan(GAS_LIMIT);
@@ -51,6 +67,14 @@ contract("Adder", (accounts) => {
         it("Get saved summ - emit events", async () => {
             const rezult = await this.contractInstance.getSavedSumm({from: alice});
             await expectEvent.inTransaction(rezult.tx, this.contractInstance, "UserGetSavedNumbers")
+        })
+    })
+
+    context ("Test test", async () => {
+        it("Test test", async () => {
+            const rezult = await this.contractInstance.summTwoNumbers(5, 7, {from: alice});
+            var s = await this.contractInstance.summTwoNumbers.call(5, 7, {from: alice});
+            expect(s).to.be.bignumber.equal(new BN(12));
         })
     })
 })
